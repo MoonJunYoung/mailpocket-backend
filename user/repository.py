@@ -1,10 +1,10 @@
-from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import SubscribeModel, UserModel
-from backend.common.exceptions import (
+from common.database.connector import MysqlCRUDTemplate
+from common.database.model import SubscribeModel, UserModel
+from common.exceptions import (
     AlreadySubscribedException,
     NotSubscribedNewsletterException,
 )
-from backend.user.domain import User
+from user.domain import User
 
 
 class UserRepository:

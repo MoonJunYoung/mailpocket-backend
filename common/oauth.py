@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from backend.common.exceptions import InvalidOauthException
+from common.exceptions import InvalidOauthException
 
 load_dotenv()
 kakao_cilent_id = os.environ.get("KAKAO_CLIENT_ID")

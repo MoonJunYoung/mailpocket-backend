@@ -9,14 +9,10 @@ load_dotenv()
 
 
 class MysqlConnector:
-    host = os.environ.get("DB_HOST")
-    port = os.environ.get("DB_PORT")
-    user_name = os.environ.get("DB_USERNAME")
-    passwd = os.environ.get("DB_PASSWD")
-    database = os.environ.get("DB_DATABASE")
-    engine = create_engine(
-        f"mysql+pymysql://{user_name}:{passwd}@{host}:{port}/{database}"
-    )
+    db_url = os.environ.get("DB_URL")
+    if not db_url:
+        db_url = "mysql+pymysql://root:answnsdud1@localhost:3306/mailpocket"
+    engine = create_engine(db_url)
     Session = scoped_session(sessionmaker(bind=engine))
 
 

@@ -1,8 +1,14 @@
 import json
 import os
 
-import requests
+import openai
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+load_dotenv()
+
+api_key = os.environ.get("OPENAI_API_KEY")
+openai.api_key = api_key
 
 MODEL = "gpt-3.5-turbo-0125"
 PROMPT = """
@@ -33,9 +39,17 @@ def mail_summary(from_email, subject, html):
     for _ in range(3):
         try:
             html_text = parsing_html_text(html)
-            response = requests.post("http://localhost:8000/summary", json={"message": html_text})
-            content = response.json().get("message")
-            
+            response = openai.chat.completions.create(
+                model=MODEL,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": PROMPT},
+                    {"role": "user", "content": f"뉴스:{html_text}"},
+                ],
+                temperature=0,
+            )
+            content = response.choices[0].message.content
+
             print(content)
 
             if "```json" in content:

@@ -4,10 +4,10 @@ from fastapi import APIRouter, Header, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-from backend.common.exceptions import catch_exception
-from backend.common.token import Token
-from backend.mail.service import MailService
-from backend.newsletter.service import NewsLetterService
+from common.exceptions import catch_exception
+from common.token import Token
+from mail.service import MailService
+from newsletter.service import NewsLetterService
 
 newsletter_service = NewsLetterService()
 mail_service = MailService()

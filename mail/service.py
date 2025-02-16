@@ -1,10 +1,12 @@
-from backend.channel.repository import ChannelRepository
-from backend.common.exceptions import UnknownFromEamilException
-from backend.common.slack_api import SlackAPI
-from backend.mail.domain import Mail
-from backend.mail.repository import MailRepository
-from backend.newsletter.repository import NewsLetterRepository
-from backend.user.repository import UserRepository
+from fastapi.responses import HTMLResponse
+
+from channel.repository import ChannelRepository
+from common.exceptions import UnknownFromEamilException
+from common.slack_api import SlackAPI
+from mail.domain import Mail
+from mail.repository import MailRepository
+from newsletter.repository import NewsLetterRepository
+from user.repository import UserRepository
 
 
 class MailDTO:
@@ -24,9 +26,7 @@ class MailService:
         mail = self.mail_repository.read_mail_data_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
         self.slack_api.loging(mail)
-        newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(
-            mail.from_email
-        ).run()
+        newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(mail.from_email).run()
         if not newsletter:
             self.slack_api.loging_unknown_email_address(mail)
             raise UnknownFromEamilException(mail.from_email)
@@ -42,9 +42,7 @@ class MailService:
             for channel in channels:
                 if channel.slack_channel_id in notified_slack_channel_id_list:
                     continue
-                self.slack_api.sending_mail_recv_notification(
-                    channel=channel, mail=mail, newsletter=newsletter
-                )
+                self.slack_api.sending_mail_recv_notification(channel=channel, mail=mail, newsletter=newsletter)
                 notified_slack_channel_id_list.append(channel.slack_channel_id)
 
     def read(self, s3_object_key):
@@ -54,9 +52,7 @@ class MailService:
         return mail
 
     def get_last_mail_of_newsletter_by_newsletter_id(self, newsletter_id):
-        mail = self.mail_repository.ReadLastMailOfNewsltterByNewsletterID(
-            newsletter_id
-        ).run()
+        mail = self.mail_repository.ReadLastMailOfNewsltterByNewsletterID(newsletter_id).run()
         self.mail_repository.load_mail_data_by_s3_object_key(mail)
         mail.parser_eamil()
         return mail
@@ -67,3 +63,12 @@ class MailService:
         mail.parser_eamil()
         mail.summary()
         self.mail_repository.UpdateMailSummaryList(mail).run()
+
+    def get_mail_list(self):
+        mail_list = self.mail_repository.read_mail_list()
+        return mail_list
+
+    def get_mail_detail(self, mail_id):
+        mail = self.mail_repository.read_mail_data_by_s3_object_key(mail_id)
+        mail.parser_eamil()
+        return HTMLResponse(content=mail.html_body)

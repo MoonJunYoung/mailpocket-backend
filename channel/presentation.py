@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Header, Request, Response
 from pydantic import BaseModel
 
-from backend.channel.service import ChannelService
-from backend.common.exceptions import catch_exception
-from backend.common.token import Token
+from channel.service import ChannelService
+from common.exceptions import catch_exception
+from common.token import Token
 
 channel_service = ChannelService()
 

@@ -1,12 +1,12 @@
-from backend.channel.domain import Channel
-from backend.channel.repository import ChannelRepository
-from backend.common.slack_api import SlackAPI
-from backend.mail.domain import Mail
-from backend.mail.repository import MailRepository
-from backend.newsletter.domain import NewsLetter
-from backend.newsletter.repository import NewsLetterRepository
-from backend.user.domain import User
-from backend.user.repository import UserRepository
+from channel.domain import Channel
+from channel.repository import ChannelRepository
+from common.slack_api import SlackAPI
+from mail.domain import Mail
+from mail.repository import MailRepository
+from newsletter.domain import NewsLetter
+from newsletter.repository import NewsLetterRepository
+from user.domain import User
+from user.repository import UserRepository
 
 
 class ChannelDTO:

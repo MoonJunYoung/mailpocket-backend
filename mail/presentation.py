@@ -2,8 +2,8 @@ from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-from backend.common.exceptions import catch_exception
-from backend.mail.service import MailService
+from common.exceptions import catch_exception
+from mail.service import MailService
 
 mail_service = MailService()
 

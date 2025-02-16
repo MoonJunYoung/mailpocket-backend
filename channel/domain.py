@@ -1,4 +1,4 @@
-from backend.common.exceptions import ChannelUserMismatchException
+from common.exceptions import ChannelUserMismatchException
 
 
 class Channel:

@@ -2,8 +2,8 @@ import datetime
 
 from sqlalchemy import func
 
-from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import (
+from common.database.connector import MysqlCRUDTemplate
+from common.database.model import (
     CategoryModel,
     MailModel,
     NewsletterEmailAddressesModel,
@@ -11,10 +11,10 @@ from backend.common.database.model import (
     SubscribeModel,
     SubscribeRankingModel,
 )
-from backend.common.exceptions import UnknownFromEamilException
-from backend.mail.domain import Mail
-from backend.newsletter.domain import Category, NewsLetter
-from backend.user.domain import User
+from common.exceptions import UnknownFromEamilException
+from mail.domain import Mail
+from newsletter.domain import Category, NewsLetter
+from user.domain import User
 
 
 class NewsLetterRepository:

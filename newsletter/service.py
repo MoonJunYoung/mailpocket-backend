@@ -1,7 +1,7 @@
-from backend.mail.repository import MailRepository
-from backend.newsletter.domain import Category, NewsLetter
-from backend.newsletter.repository import NewsLetterRepository
-from backend.user.repository import UserRepository
+from mail.repository import MailRepository
+from newsletter.domain import Category, NewsLetter
+from newsletter.repository import NewsLetterRepository
+from user.repository import UserRepository
 
 
 class NewsLetterlDTO:

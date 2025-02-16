@@ -1,8 +1,8 @@
-from backend.channel.domain import Channel
-from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import ChannelModel, SubscribeModel
-from backend.common.exceptions import UnknownFromEamilException
-from backend.newsletter.domain import NewsLetter
+from channel.domain import Channel
+from common.database.connector import MysqlCRUDTemplate
+from common.database.model import ChannelModel, SubscribeModel
+from common.exceptions import UnknownFromEamilException
+from newsletter.domain import NewsLetter
 
 
 class ChannelRepository:

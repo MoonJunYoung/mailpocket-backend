@@ -4,9 +4,9 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from backend.channel.domain import Channel
-from backend.mail.domain import Mail
-from backend.newsletter.domain import NewsLetter
+from channel.domain import Channel
+from mail.domain import Mail
+from newsletter.domain import NewsLetter
 
 load_dotenv()
 client_id = os.environ.get("SLACK_CLIENT_ID")

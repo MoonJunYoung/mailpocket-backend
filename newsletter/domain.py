@@ -1,4 +1,4 @@
-from backend.mail.domain import Mail
+from mail.domain import Mail
 
 
 class NewsLetter:

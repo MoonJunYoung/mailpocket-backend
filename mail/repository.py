@@ -1,35 +1,38 @@
-from backend.common.database.connector import MysqlCRUDTemplate
-from backend.common.database.model import MailModel
-from backend.common.s3 import S3Connector
-from backend.mail.domain import Mail
-from backend.newsletter.domain import NewsLetter
+from common.database.connector import MysqlCRUDTemplate
+from common.database.model import MailModel
+from common.s3 import S3Connector
+from mail.domain import Mail
+from newsletter.domain import NewsLetter
 
 
 class MailRepository(S3Connector):
     def read_mail_data_by_s3_object_key(self, s3_object_key):
         try:
-            object = self.seoul_s3_client.get_object(
-                Bucket=self.seoul_bucket_name, Key=s3_object_key
-            )
+            object = self.s3_clinet.get_object(Bucket=self.bucket_name, Key=s3_object_key)
+            mail_content = object["Body"].read()
         except:
-            object = self.virginia_s3_client.get_object(
-                Bucket=self.virginia_bucket_name, Key=s3_object_key
-            )
-        mail_content = object["Body"].read()
+            mail_content = None
         mail = Mail(id=None, mail_content=mail_content, s3_object_key=s3_object_key)
         return mail
 
     def load_mail_data_by_s3_object_key(self, mail: Mail):
         try:
-            object = self.seoul_s3_client.get_object(
-                Bucket=self.seoul_bucket_name, Key=mail.s3_object_key
-            )
+            object = self.s3_clinet.get_object(Bucket=self.bucket_name, Key=mail.s3_object_key)
+            mail_content = object["Body"].read()
         except:
-            object = self.virginia_s3_client.get_object(
-                Bucket=self.virginia_bucket_name, Key=mail.s3_object_key
-            )
-        mail_content = object["Body"].read()
+            mail_content = None
         mail.mail_content = mail_content
+
+    def read_mail_list(self):
+        mail_list = []
+        try:
+            response = self.s3_clinet.list_objects_v2(Bucket=self.bucket_name)
+            if "Contents" in response:
+                for obj in response["Contents"]:
+                    mail_list.append(obj["Key"])  # 오브젝트 키를 리스트에 추가
+        except Exception as e:
+            print(f"Error fetching mail list: {e}")
+        return mail_list
 
     class CreateMail(MysqlCRUDTemplate):
         def __init__(self, mail: Mail) -> None:
@@ -55,11 +58,7 @@ class MailRepository(S3Connector):
             super().__init__()
 
         def execute(self):
-            mail_model = (
-                self.session.query(MailModel)
-                .filter(MailModel.s3_object_key == self.s3_object_key)
-                .first()
-            )
+            mail_model = self.session.query(MailModel).filter(MailModel.s3_object_key == self.s3_object_key).first()
             if not mail_model:
                 return None
 
@@ -81,11 +80,7 @@ class MailRepository(S3Connector):
             super().__init__()
 
         def execute(self):
-            mail_model = (
-                self.session.query(MailModel)
-                .filter(MailModel.s3_object_key == self.mail.s3_object_key)
-                .first()
-            )
+            mail_model = self.session.query(MailModel).filter(MailModel.s3_object_key == self.mail.s3_object_key).first()
             if not mail_model:
                 return None
 
@@ -102,11 +97,7 @@ class MailRepository(S3Connector):
             super().__init__()
 
         def execute(self):
-            mail_model = (
-                self.session.query(MailModel)
-                .filter(MailModel.id == self.mail.id)
-                .first()
-            )
+            mail_model = self.session.query(MailModel).filter(MailModel.id == self.mail.id).first()
             if not mail_model:
                 return None
             mail_model.summary_list = self.mail.summary_list
@@ -118,11 +109,7 @@ class MailRepository(S3Connector):
             super().__init__()
 
         def execute(self):
-            mail_model = (
-                self.session.query(MailModel)
-                .filter(MailModel.s3_object_key == self.mail.s3_object_key)
-                .first()
-            )
+            mail_model = self.session.query(MailModel).filter(MailModel.s3_object_key == self.mail.s3_object_key).first()
             if not mail_model:
                 return False
             self.session.delete(mail_model)
@@ -135,11 +122,7 @@ class MailRepository(S3Connector):
 
         def execute(self):
             mail_list = list()
-            mail_models = (
-                self.session.query(MailModel)
-                .filter(MailModel.newsletter_id == self.newsletter.id)
-                .all()
-            )
+            mail_models = self.session.query(MailModel).filter(MailModel.newsletter_id == self.newsletter.id).all()
             if not mail_models:
                 return None
             for mail_model in mail_models:
@@ -159,10 +142,7 @@ class MailRepository(S3Connector):
 
         def execute(self):
             mail_model = (
-                self.session.query(MailModel)
-                .filter(MailModel.newsletter_id == self.newsletter_id)
-                .order_by(MailModel.recv_at.desc())
-                .first()
+                self.session.query(MailModel).filter(MailModel.newsletter_id == self.newsletter_id).order_by(MailModel.recv_at.desc()).first()
             )
             if not mail_model:
                 return False

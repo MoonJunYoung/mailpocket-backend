@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Header, Request
 from pydantic import BaseModel
 
-from backend.common.exceptions import catch_exception
-from backend.common.oauth import Oauth
-from backend.common.token import Token
-from backend.user.service import UserService
+from common.exceptions import catch_exception
+from common.oauth import Oauth
+from common.token import Token
+from user.service import UserService
 
 user_service = UserService()
 

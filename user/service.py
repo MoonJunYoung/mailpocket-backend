@@ -1,12 +1,12 @@
 import bcrypt
 
-from backend.common.exceptions import (
+from common.exceptions import (
     IdentifierAlreadyException,
     IdentifierNotFoundException,
     PasswordNotMatchException,
 )
-from backend.user.domain import User
-from backend.user.repository import UserRepository
+from user.domain import User
+from user.repository import UserRepository
 
 
 class UserService:

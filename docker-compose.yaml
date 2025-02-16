@@ -1,0 +1,9 @@
+services:
+  back-office:
+    build:
+      context: ./
+      dockerfile: ./dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DB_URL: mysql+pymysql://admin:shehd119@nodong-119.cdk4yqiemg7r.ap-northeast-2.rds.amazonaws.com:3306/nodong-119

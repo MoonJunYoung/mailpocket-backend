@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from backend.user.domain import User
+from user.domain import User
 
 load_dotenv()
 
