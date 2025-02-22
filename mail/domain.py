@@ -64,7 +64,7 @@ class Mail:
             self.html_body = html_body
             del self.mail_content
         else:
-            self.date = None
+            self.date = self.recv_at.date()
             self.from_name = None
             self.from_email = None
             self.subject = None

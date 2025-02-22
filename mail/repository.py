@@ -94,6 +94,7 @@ class MailRepository(S3Connector):
             self.mail.summary_list = mail_model.summary_list
             self.mail.share_text = self.mail._make_share_text()
             self.mail.newsletter_id = mail_model.newsletter_id
+            self.mail.recv_at = mail_model.recv_at
             return True
 
     class UpdateMailSummaryList(MysqlCRUDTemplate):
