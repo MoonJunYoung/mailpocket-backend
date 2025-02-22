@@ -25,10 +25,8 @@ class MailService:
     def recv(self, s3_object_key):
         mail = self.mail_repository.read_mail_data_by_s3_object_key(s3_object_key)
         mail.parser_eamil()
-        self.slack_api.loging(mail)
         newsletter = self.newsletter_repository.LoadNewsLetterByFromEmail(mail.from_email).run()
         if not newsletter:
-            self.slack_api.loging_unknown_email_address(mail)
             raise UnknownFromEamilException(mail.from_email)
         mail.set_newsletter_id(newsletter.id)
 

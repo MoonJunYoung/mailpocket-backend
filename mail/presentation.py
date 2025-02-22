@@ -27,9 +27,7 @@ class MailPresentation:
         background_tasks: BackgroundTasks,
         s3_email_recv_data: S3MailRecvData,
     ):
-        background_tasks.add_task(
-            recv_background_task, s3_email_recv_data.s3_object_key
-        )
+        background_tasks.add_task(recv_background_task, s3_email_recv_data.s3_object_key)
         return "I received an email. Summary tasks run in the background."
 
     @router.get("", status_code=200)
