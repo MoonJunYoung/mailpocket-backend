@@ -9,8 +9,10 @@ load_dotenv()
 
 
 class MysqlConnector:
-    db_url = os.environ.get("DB_URL")
-    if not db_url:
+    server_status = os.environ.get("SERVER_STATUS")
+    if server_status != "dev":
+        db_url = os.environ.get("DB_URL")
+    else:
         db_url = "mysql+pymysql://root:answnsdud1@localhost:3306/mailpocket"
     engine = create_engine(db_url)
     Session = scoped_session(sessionmaker(bind=engine))

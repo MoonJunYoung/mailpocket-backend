@@ -21,7 +21,7 @@ class Mail:
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
         self.subject = subject
-        self.read_link = f"https://mailpocket.me/read?mail={self.s3_object_key}"
+        self.read_link = f"https://mailpocket.store/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
         if self.summary_list:
             self.share_text = self._make_share_text()
@@ -41,9 +41,7 @@ class Mail:
         if self.mail_content:
             parsed_email = BytesParser(policy=policy.default).parsebytes(self.mail_content)
             self.date = datetime.datetime.strftime(
-                datetime.datetime.strptime(
-                    str(parsed_email["Date"]), "%a, %d %b %Y %H:%M:%S %z"
-                ),
+                datetime.datetime.strptime(str(parsed_email["Date"]), "%a, %d %b %Y %H:%M:%S %z"),
                 "%Y-%m-%d %H:%M:%S",
             )
             from_email = str(parsed_email["From"])
@@ -52,15 +50,11 @@ class Mail:
             if parsed_email.is_multipart():
                 for part in parsed_email.walk():
                     if part.get_content_type() == "text/html":
-                        html_body = part.get_payload(decode=True).decode(
-                            part.get_content_charset()
-                        )
+                        html_body = part.get_payload(decode=True).decode(part.get_content_charset())
                         break
             else:
                 if parsed_email.get_content_type() == "text/html":
-                    html_body = parsed_email.get_payload(decode=True).decode(
-                        parsed_email.get_content_charset()
-                    )
+                    html_body = parsed_email.get_payload(decode=True).decode(parsed_email.get_content_charset())
 
             self.from_name = from_email.split(" <")[0]
             if '"' in self.from_name:
@@ -70,7 +64,7 @@ class Mail:
             self.html_body = html_body
             del self.mail_content
         else:
-            self.date = None
+            self.date = self.recv_at.date()
             self.from_name = None
             self.from_email = None
             self.subject = None

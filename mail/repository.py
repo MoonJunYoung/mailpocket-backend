@@ -29,9 +29,14 @@ class MailRepository(S3Connector):
             response = self.s3_clinet.list_objects_v2(Bucket=self.bucket_name)
             if "Contents" in response:
                 for obj in response["Contents"]:
-                    mail_list.append(obj["Key"])  # 오브젝트 키를 리스트에 추가
+                    item = {
+                        "s3_object_key": obj["Key"],
+                        "recv_at": obj["LastModified"],
+                    }
+                    mail_list.append(item)
         except Exception as e:
             print(f"Error fetching mail list: {e}")
+        mail_list.sort(key=lambda x: x["recv_at"], reverse=True)
         return mail_list
 
     class CreateMail(MysqlCRUDTemplate):
@@ -89,6 +94,7 @@ class MailRepository(S3Connector):
             self.mail.summary_list = mail_model.summary_list
             self.mail.share_text = self.mail._make_share_text()
             self.mail.newsletter_id = mail_model.newsletter_id
+            self.mail.recv_at = mail_model.recv_at
             return True
 
     class UpdateMailSummaryList(MysqlCRUDTemplate):
