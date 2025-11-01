@@ -21,7 +21,7 @@ class Mail:
         self.mail_content = mail_content
         self.s3_object_key = s3_object_key
         self.subject = subject
-        self.read_link = f"https://mailpocket.store/read?mail={self.s3_object_key}"
+        self.read_link = f"https://mailpocket.shop/read?mail={self.s3_object_key}"
         self.summary_list = summary_list
         if self.summary_list:
             self.share_text = self._make_share_text()

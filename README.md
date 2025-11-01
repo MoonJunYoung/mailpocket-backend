@@ -1,6 +1,6 @@
 # MailPocket
 
-[https://mailpocket.store/](https://mailpocket.store/)
+[https://mailpocket.shop/](https://mailpocket.shop/)
 
 <p align="center">
   <img src="https://github.com/moonjunyoung/mailpocket/assets/110980148/66e862d4-7fd7-46da-9cd0-7c2d478ac0fd" alt="mailpocket_Logo">
